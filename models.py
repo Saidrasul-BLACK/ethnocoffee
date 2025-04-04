@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Boolean, Numeric, ForeignKey, TIMESTAMP
+from sqlalchemy import Column, Integer, String, Text, Boolean, Numeric, Float, ForeignKey, TIMESTAMP
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -29,13 +29,14 @@ class Restaurant(Base):
     is_active = Column(Boolean, default=True)
 
 class MenuItem(Base):
-    __tablename__ = "menu_items"
+   __tablename__ = "menu"
+
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(Text, nullable=False)
-    description = Column(Text)
-    price = Column(Numeric(10, 2), nullable=False)
-    image_url = Column(Text)
-    category = Column(String)
+    name = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    price = Column(Float, nullable=False)
+    restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
+    image_url = Column(String, nullable=True)
 
 class MenuAvailability(Base):
     __tablename__ = "menu_availability"
