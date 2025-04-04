@@ -1,9 +1,28 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile, File
+import shutil
+import os
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models import MenuItem, MenuAvailability
 
 router = APIRouter()
+
+
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+@router.post("/upload_image/")
+async def upload_image(file: UploadFile = File(...)):
+    file_path = f"{UPLOAD_DIR}/{file.filename}"
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {"image_url": f"/static/{file.filename}"}
+
+
+
+
+
 
 def get_db():
     db = SessionLocal()
